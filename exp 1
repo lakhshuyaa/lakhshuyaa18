@@ -1,0 +1,48 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from scipy.stats import skew, kurtosis, probplot
+import numpy as np
+
+# Load the Iris dataset
+iris = load_iris()
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+
+# Select an attribute; for this example, let's choose 'sepal length (cm)'
+attribute = 'sepal length (cm)'
+
+# Print the first five records of the selected attribute
+print("First five records of the selected attribute:")
+print(df[attribute].head())
+
+# Plot the Histogram and KDE of the selected attribute
+plt.figure(figsize=(12, 6))
+
+# Histogram
+plt.subplot(1, 2, 1)
+sns.histplot(df[attribute], kde=False, bins=20)
+plt.title('Histogram of ' + attribute)
+
+# KDE
+plt.subplot(1, 2, 2)
+sns.kdeplot(df[attribute], shade=True)
+plt.title('KDE of ' + attribute)
+
+plt.tight_layout()
+plt.show()
+
+# Probability plot for the selected attribute
+plt.figure(figsize=(6, 6))
+probplot(df[attribute], dist="norm", plot=plt)
+plt.title('Probability Plot of ' + attribute)
+plt.show()
+
+# Find the skewness for the selected attribute
+attribute_skewness = skew(df[attribute])
+print(f'Skewness of {attribute}: {attribute_skewness}')
+
+# Find the kurtosis for the selected attribute
+attribute_kurtosis = kurtosis(df[attribute])
+print(f'Kurtosis of {attribute}: {attribute_kurtosis}')
