@@ -1,0 +1,36 @@
+import pandas as pd  
+from sklearn.datasets import load_iris  
+
+# Load the Iris dataset  
+iris = load_iris()  
+
+# Create a DataFrame from the data  
+iris_df = pd.DataFrame(data=iris.data, columns=iris.feature_names)  
+
+# Add the target column (species) and its corresponding species_id  
+iris_df['species_id'] = iris.target  
+iris_df['species'] = iris.target_names[iris.target]  
+
+# Print the first 10 records  
+print("First 10 records:")  
+print(iris_df.head(10))  
+
+# Total number of rows & columns in the dataset  
+rows, columns = iris_df.shape  
+print("\nTotal number of rows:", rows)  
+print("Total number of columns:", columns)  
+
+# Column names or data list  
+print("\nColumn names:")  
+print(iris_df.columns.tolist())  
+
+# Find the mean of all the attributes  
+mean_values = iris_df.mean()  
+print("\nMean of numerical attributes:")  
+print(mean_values)  
+
+# If you want to include species_id, we can also examine means grouped by species  
+mean_by_species = iris_df.groupby(['species']).mean().drop(columns='species_id')  
+print("\nMean of attributes grouped by species:")  
+print(mean_by_species)
+
