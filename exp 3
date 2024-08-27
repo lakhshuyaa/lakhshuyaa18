@@ -1,0 +1,58 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+# Step 1: Load the dataset
+# You should replace 'your_dataset.csv' with the path to your actual dataset
+df = pd.read_csv('your_dataset.csv')
+
+# List of attributes to analyze
+attributes = df.columns
+
+# Function to plot normal distribution and histogram
+def plot_distribution(attribute):
+    data = df[attribute].dropna()  # Drop NaN values
+    
+    # Step 2: Count the total number of records based on values
+    print(f"\nAttribute: {attribute}")
+    print("Value Counts:")
+    print(data.value_counts())
+
+    # Step 3: Plot Histogram
+    plt.figure(figsize=(14, 6))
+
+    plt.subplot(1, 2, 1)
+    plt.hist(data, bins=30, edgecolor='black')
+    plt.title(f'Histogram of {attribute}')
+    plt.xlabel(attribute)
+    plt.ylabel('Frequency')
+    
+    # Step 4: Plot Normal Distribution
+    mean = np.mean(data)
+    sd = np.std(data)
+    
+    x = np.linspace(mean - 3*sd, mean + 3*sd, 100)
+    p = stats.norm.pdf(x, mean, sd)
+    
+    plt.subplot(1, 2, 2)
+    plt.plot(x, p, 'k', linewidth=2)
+    plt.title(f'Normal Distribution of {attribute}')
+    plt.xlabel(attribute)
+    plt.ylabel('Density')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # Print SD and Mean
+    print(f"Mean of {attribute}: {mean:.2f}")
+    print(f"Standard Deviation of {attribute}: {sd:.2f}")
+
+# Step 5: Repeat for all attributes
+for attribute in attributes:
+    if pd.api.types.is_numeric_dtype(df[attribute]):  # Ensure the attribute is numeric
+        plot_distribution(attribute)
+    else:
+        print(f"Skipping non-numeric attribute: {attribute}")
+
