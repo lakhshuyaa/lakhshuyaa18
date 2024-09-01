@@ -1,0 +1,26 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+# Load Iris dataset
+iris = load_iris()
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+
+# Statistical description
+print(df.describe())
+
+# Box plot for Petal Length
+plt.figure(figsize=(10, 6))
+sns.boxplot(y=df['petal length (cm)'])
+plt.title('Box Plot of Petal Length')
+plt.show()
+
+# Dependency Curve: Petal Length vs. Petal Width
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=df['petal length (cm)'], y=df['petal width (cm)'])
+plt.title('Petal Length vs. Petal Width')
+plt.xlabel('Petal Length (cm)')
+plt.ylabel('Petal Width (cm)')
+plt.show()
