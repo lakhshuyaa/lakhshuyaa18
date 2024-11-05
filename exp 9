@@ -1,0 +1,30 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Step 1: Prepare/Download the Data
+# For this example, we will use a sample dataset from seaborn's built-in datasets
+# Let's load the 'tips' dataset which contains data about restaurant tips.
+
+data = sns.load_dataset('tips')
+
+# Step 2: Select the attributes for constructing the Horizontal Bar Chart
+# We'll plot the total bill per day of the week to visualize the average total bill for each day
+
+# Calculate the average total bill per day
+avg_total_bill = data.groupby('day')['total_bill'].mean()
+
+# Step 3: Plot the Horizontal Bar Chart
+plt.figure(figsize=(8, 6))
+
+# Create horizontal bar chart
+sns.barplot(x=avg_total_bill, y=avg_total_bill.index, palette='viridis')
+
+# Set plot labels and title
+plt.xlabel('Average Total Bill')
+plt.ylabel('Day of the Week')
+plt.title('Average Total Bill per Day (Horizontal Bar Plot)')
+
+# Show the plot
+plt.show()
