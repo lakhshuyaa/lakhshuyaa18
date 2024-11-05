@@ -1,0 +1,73 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+
+# Step 1: Create/Load the Data
+# For this example, let's create a synthetic dataset using make_blobs
+X, y = make_blobs(n_samples=300, centers=4, random_state=42)
+
+# Step 2: Standardize the Features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Step 3: Plot the Standardized Features
+plt.figure(figsize=(8, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], s=50, c='blue', marker='o', alpha=0.6)
+plt.title('Standardized Data')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.show()
+
+# Step 4: Apply K-Means Clustering with n=3
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X_scaled)
+y_kmeans = kmeans.predict(X_scaled)
+
+# Step 5: Plot the Clusters with Their Centre Points
+plt.figure(figsize=(8, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=y_kmeans, cmap='viridis', s=50, alpha=0.6)
+centers = kmeans.cluster_centers_
+plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, marker='X', label='Centroids')
+plt.title('K-Means Clustering with 3 Clusters')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.legend()
+plt.show()
+
+# Step 6: Find the value of K using the Elbow Method
+inertia = []
+k_range = range(1, 11)
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X_scaled)
+    inertia.append(kmeans.inertia_)
+
+# Plot the Elbow Method graph
+plt.figure(figsize=(8, 6))
+plt.plot(k_range, inertia, marker='o', color='b', linestyle='--')
+plt.title('Elbow Method for Optimal k')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Inertia')
+plt.xticks(k_range)
+plt.grid(True)
+plt.show()
+
+# Step 7: Apply K-Means Clustering with the Recommended Value of K (e.g., k=4)
+optimal_k = 4  # Based on the Elbow method
+kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+kmeans.fit(X_scaled)
+y_kmeans_optimal = kmeans.predict(X_scaled)
+
+# Step 8: Plot the Clusters with Their Centre Points
+plt.figure(figsize=(8, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=y_kmeans_optimal, cmap='viridis', s=50, alpha=0.6)
+centers = kmeans.cluster_centers_
+plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, marker='X', label='Centroids')
+plt.title(f'K-Means Clustering with {optimal_k} Clusters')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.legend()
+plt.show()
